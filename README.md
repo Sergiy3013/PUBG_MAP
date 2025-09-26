@@ -9,7 +9,9 @@
 如果软件出现错误后删除 配置文件 config.dat，软件会自动生成新的  
    
 本项目不会造成游戏封号，完全基于屏幕绘图以及像素测量  
-
+# 编译要求
+   c++桌面开发自动勾选包
+   c++ MFC
 # 演示视频
 https://www.bilibili.com/video/BV1nKYueiEhY
 # 基本功能
