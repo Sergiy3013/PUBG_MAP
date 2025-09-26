@@ -10,7 +10,7 @@
    
 本项目不会造成游戏封号，完全基于屏幕绘图以及像素测量  
 # 编译要求
-   c++桌面开发自动勾选包
+   c++桌面开发自动勾选包  
    c++ MFC
 # 演示视频
 https://www.bilibili.com/video/BV1nKYueiEhY
