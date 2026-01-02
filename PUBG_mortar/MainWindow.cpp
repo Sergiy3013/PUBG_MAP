@@ -481,7 +481,7 @@ const void MainWindow::Draw(HDC & hdc)
         CLIP_DEFAULT_PRECIS,       // точність обрізки
         DEFAULT_QUALITY,           // якість відтворення
         DEFAULT_PITCH | FF_SWISS,  // сімейство і шаблон
-        L"Arial"                 // ім'я шрифту
+        L"Segoe UI"                 // ім'я шрифту (краще підтримує кирилицю)
     );
 
     // Вибираємо шрифт у DC

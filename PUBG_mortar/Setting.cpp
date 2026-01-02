@@ -143,6 +143,67 @@ void Setting::Setinfo(MainWindowInfo &showinfo)
 			Chcke1.SetCheck(BST_UNCHECKED);
 		
 	}
+
+	// Збільшити розміри контролів і застосувати шрифт, що підтримує кирилицю
+	// Створюємо шрифт із більшим розміром і восточноєвропейською кодировкою
+	CFont* pNewFont = new CFont();
+	LOGFONTW lf = {0};
+	lf.lfHeight = -18; // приблизно 18pt
+	lf.lfWeight = FW_NORMAL;
+	lf.lfCharSet = EASTEUROPE_CHARSET;
+	wcscpy_s(lf.lfFaceName, L"Segoe UI");
+	pNewFont->CreateFontIndirectW(&lf);
+
+	// Застосувати шрифт до діалогу та основних контролів
+	SetFont(pNewFont);
+	HOTKEY1.SetFont(pNewFont);
+	HOTKEY2.SetFont(pNewFont);
+	HOTKEY3.SetFont(pNewFont);
+	HOTKEY4.SetFont(pNewFont);
+	HOTKEY6.SetFont(pNewFont);
+	HOTKEY7.SetFont(pNewFont);
+	HOTKEY8.SetFont(pNewFont);
+	CComboBox_List.SetFont(pNewFont);
+	EDIT.SetFont(pNewFont);
+	EDIT2.SetFont(pNewFont);
+	EDIT_X.SetFont(pNewFont);
+	EDIT_Y.SetFont(pNewFont);
+	EDIT_BOTTOM.SetFont(pNewFont);
+	EDIT_RIGHT.SetFont(pNewFont);
+	Chcke1.SetFont(pNewFont);
+
+	// Функція для масштабування контролу вдвічі
+	auto DoubleControlSize = [&](CWnd& ctrl) {
+		CRect rc;
+		ctrl.GetWindowRect(&rc);
+		ScreenToClient(&rc);
+		rc.right = rc.left + (rc.Width() * 2);
+		rc.bottom = rc.top + (rc.Height() * 2);
+		ctrl.MoveWindow(&rc);
+	};
+
+	// Збільшуємо основні поля введення, комбобокс і кнопки
+
+	DoubleControlSize(HOTKEY1);
+	DoubleControlSize(HOTKEY2);
+	DoubleControlSize(HOTKEY3);
+	DoubleControlSize(HOTKEY4);
+	DoubleControlSize(HOTKEY6);
+	DoubleControlSize(HOTKEY7);
+	DoubleControlSize(HOTKEY8);
+	DoubleControlSize(CComboBox_List);
+	DoubleControlSize(EDIT);
+	DoubleControlSize(EDIT2);
+	DoubleControlSize(EDIT_X);
+	DoubleControlSize(EDIT_Y);
+	DoubleControlSize(EDIT_BOTTOM);
+	DoubleControlSize(EDIT_RIGHT);
+
+	// Збільшити розмір кнопок OK/Cancel якщо вони існують
+	CWnd* pBtnOK = GetDlgItem(IDOK);
+	CWnd* pBtnCancel = GetDlgItem(IDCANCEL);
+	if (pBtnOK) DoubleControlSize(*pBtnOK);
+	if (pBtnCancel) DoubleControlSize(*pBtnCancel);
 }
 
 // установка відображення гарячих клавіш у контролі
