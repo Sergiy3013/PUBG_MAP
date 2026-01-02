@@ -1,11 +1,12 @@
 //{{NO_DEPENDENCIES}}
-// Автоматично згенерований файл ресурсів для Microsoft Visual C++
-// Використовується в PUBG_mortar.rc
+// Microsoft Visual C++ generated include file.
+// Used by PUBG_mortar.rc
 //
 #define IDD_DIALOG1                     101
 #define IDR_MENU1                       104
 #define IDI_ICON1                       105
 #define IDC_HOTKEY1                     1001
+#define IDC_HOTKEY5                     1002
 #define IDC_HOTKEY2                     1005
 #define IDC_HOTKEY3                     1006
 #define IDC_HOTKEY6                     1009
