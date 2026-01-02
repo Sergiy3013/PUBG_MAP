@@ -36,9 +36,9 @@ jobs:
           msbuild PUBG_mortar.sln /p:Configuration=Release /p:Platform=x64 /p:OutDir=artifacts\x64\ /t:Build /m
         shell: cmd
 
-      - name: Build Release Win32 (Console)
+      - name: Build Release x86 (Console)
         run: |
-          msbuild PUBG_mortar.sln /p:Configuration=Release /p:Platform=Win32 /p:OutDir=artifacts\x86\ /t:Build /m
+          msbuild PUBG_mortar.sln /p:Configuration=Release /p:Platform=x86 /p:OutDir=artifacts\x86\ /t:Build /m
         shell: cmd
 
       - name: Prepare artifacts folder and rename executables
