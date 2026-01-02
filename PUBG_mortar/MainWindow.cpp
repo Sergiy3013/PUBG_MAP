@@ -476,7 +476,7 @@ const void MainWindow::Draw(HDC & hdc)
         FALSE,                     // курсив
         FALSE,                     // підкреслення
         FALSE,                     // закреслення
-        DEFAULT_CHARSET,           // набір символів
+        EASTEUROPE_CHARSET,        // набір символів (підтримка кирилиці)
         OUT_DEFAULT_PRECIS,        // точність виходу
         CLIP_DEFAULT_PRECIS,       // точність обрізки
         DEFAULT_QUALITY,           // якість відтворення
@@ -496,28 +496,34 @@ const void MainWindow::Draw(HDC & hdc)
     std::wstring str6 = L"Відстань у метрах: " + std::to_wstring((int)(std::sqrt(std::pow(pointList[0].x - pointList[1].x, 2) + std::pow(pointList[0].y - pointList[1].y, 2)) * ((double)100 / info.POINT_100M[Map_Size])));
 
     
-    // �����ı���ʽ
+    // Параметри для DrawTextExW
     DRAWTEXTPARAMS dtp;
     ZeroMemory(&dtp, sizeof(DRAWTEXTPARAMS));
     dtp.cbSize = sizeof(DRAWTEXTPARAMS);
-    dtp.iTabLength = 4; // ���Ը�����Ҫ�����Ʊ�λ
-    dtp.iLeftMargin = 0; // ��߾�
-    dtp.iRightMargin = 0; // �ұ߾�
-    
-    RECT textRect = info.BackGround;
-    textRect.left += 5;  // �ӵ��ڱ߾�
-    textRect.top += 5;
+    dtp.iTabLength = 4;
+    dtp.iLeftMargin = 0;
+    dtp.iRightMargin = 0;
 
-    // �����ı�
-    DrawTextExW(hdc, const_cast<LPWSTR>(str1.c_str()), -1, &textRect, DT_LEFT | DT_WORDBREAK, &dtp);
-    textRect.top += 20;
-    DrawTextExW(hdc, const_cast<LPWSTR>(str3.c_str()), -1, &textRect, DT_LEFT | DT_WORDBREAK, &dtp);
-    textRect.top += 20;
-    DrawTextExW(hdc, const_cast<LPWSTR>(str4.c_str()), -1, &textRect, DT_LEFT | DT_WORDBREAK, &dtp);
-    textRect.top += 20;
-    DrawTextExW(hdc, const_cast<LPWSTR>(str5.c_str()), -1, &textRect, DT_LEFT | DT_WORDBREAK, &dtp);
-    textRect.top += 20;
-    DrawTextExW(hdc, const_cast<LPWSTR>(str6.c_str()), -1, &textRect, DT_LEFT | DT_WORDBREAK, &dtp);
+    RECT textRect = info.BackGround;
+    textRect.left += 5;
+    textRect.top += 5;
+    const int padding = 4;
+
+    auto DrawAndAdvance = [&](const std::wstring& s) {
+        RECT calc = textRect;
+        UINT calcFlags = DT_LEFT | DT_WORDBREAK | DT_CALCRECT;
+        DrawTextExW(hdc, const_cast<LPWSTR>(s.c_str()), -1, &calc, calcFlags, &dtp);
+        // намалювати текст у видимій області
+        UINT drawFlags = DT_LEFT | DT_WORDBREAK;
+        DrawTextExW(hdc, const_cast<LPWSTR>(s.c_str()), -1, &textRect, drawFlags, &dtp);
+        textRect.top += (calc.bottom - calc.top) + padding;
+    };
+
+    DrawAndAdvance(str1);
+    DrawAndAdvance(str3);
+    DrawAndAdvance(str4);
+    DrawAndAdvance(str5);
+    DrawAndAdvance(str6);
 
 
     // �ָ��ɵ�����
