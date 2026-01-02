@@ -1,0 +1,54 @@
+name: Windows Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup MSBuild tools info
+        run: |
+          echo "Building with MSBuild on Windows runner"
+
+      - name: Build Release x64 (GUI)
+        run: |
+          msbuild PUBG_mortar.sln /p:Configuration=Release /p:Platform=x64 /p:OutDir=artifacts\x64\ /t:Build /m
+        shell: cmd
+
+      - name: Build Release Win32 (Console)
+        run: |
+          msbuild PUBG_mortar.sln /p:Configuration=Release /p:Platform=Win32 /p:OutDir=artifacts\x86\ /t:Build /m
+        shell: cmd
+
+      - name: Prepare artifacts folder and rename executables
+        run: |
+          mkdir artifacts\release
+          echo "Looking for built executables..."
+          $exe64 = Get-ChildItem -Path artifacts\x64 -Filter *.exe -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+          if (-not $exe64) {
+            Write-Error "No .exe found in artifacts\\x64"
+            exit 1
+          }
+          $exe86 = Get-ChildItem -Path artifacts\x86 -Filter *.exe -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+          if (-not $exe86) {
+            Write-Error "No .exe found in artifacts\\x86"
+            exit 1
+          }
+          Write-Host "Found x64 exe: $($exe64.FullName)"
+          Write-Host "Found Win32 exe: $($exe86.FullName)"
+          Copy-Item -Path $exe64.FullName -Destination artifacts\release\PUBG_MAP.exe -Force
+          Copy-Item -Path $exe86.FullName -Destination artifacts\release\PUBG_MAP-console.exe -Force
+        shell: pwsh
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: PUBG_MAP-build
+          path: artifacts\release\

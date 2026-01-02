@@ -10,19 +10,18 @@ public:
 	static void SetHinstance(HINSTANCE hinstanceF);
 	HWND CreateWin() const;
 
-	//��ֹʹ�ø��ƹ��캯������
+	// Заборонити використання неявних копіювань (delete copy semantics)
 	MainWindow(const MainWindow&) = delete;
 	MainWindow& operator=(const MainWindow&) = delete;
 	void updataDraw();
 	void SetKeyValue(std::map<int, std::vector<int>>);
 
-	//���� ���ڻ��������ı��� ,Ŀǰ�Ͻ�����������
+	// Інформація про точки для відображення на карті
 	static std::vector<POINT> pointList;
 	static MainWindowInfo info;
 	static int Map_Size;
-	//�������� 
+	// Додавання/видалення іконки в трей
 	void AddIconTray();
-	//ɾ������
 	void RemoveTray();
 	static RECT WindowSize;
 	static bool DrawPoint;
@@ -30,13 +29,13 @@ public:
 	
 
 
-	//���������ļ���
+	// Завантажити/зберегти бінарний файл конфігурації
 	bool LoadConfigurationBinary(const std::string& filename);
 	static void SaveConfigurationBinary(const std::string& filename);
 private:
-	//����
+	// Обробник вікнових повідомлень
 	static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
-	//���� �Զ�����Ϣ
+	// Обробник повідомлень від HookHandler (виклик функцій по повідомленнях)
 	static void CALLBACK messageProc(int message,LPARAM lpramr);
 
 	static std::vector<KeyboardRegister>::iterator it;
@@ -45,11 +44,11 @@ private:
 	MainWindow();
 	const static void Draw(HDC &);
 
-	//���� 
+	// Інформація про іконку в треї
 	static NOTIFYICONDATA Tray;
 
 	static HINSTANCE hinstance;
-	//����ȫ�ֱ���
+	// Глобальний екземпляр HINSTANCE програми
 	HWND hWnd;
 	
 	WNDCLASS wc;

@@ -24,7 +24,7 @@ std::string GetExecutableDirectory() {
 }
 std::string GetConfigFilePath() {
     std::string exeDir = GetExecutableDirectory();
-    return exeDir + "\\config.dat"; // ʹ�����·��
+    return exeDir + "\\config.dat"; // Використовувати шлях виконуваного файлу
 }
 
 
@@ -47,18 +47,18 @@ HWND MainWindow::CreateWin() const
     return hWnd;
 }
 
-//���ڹ����봴��
+// Конструктор класу MainWindow
 MainWindow::MainWindow()
 {
-    std::cout << "����chushihua" << std::endl;
-    //����Ĭ�ϵĴ�����Ϊ
+    std::cout << "Ініціалізація MainWindow" << std::endl;
+    // Ініціалізація значень за замовчуванням
     wc = {};
     wc.lpfnWndProc = this->WndProc;
     wc.hInstance = hinstance;
     wc.lpszClassName = TEXT("My_window");
-    //ע�ᴰ��
+    // Зареєструвати клас вікна
     RegisterClass(&wc);
-    //��������
+    // Створити вікно
     hWnd = CreateMyWindow();
     if (hWnd==nullptr)
     {
@@ -66,7 +66,7 @@ MainWindow::MainWindow()
     }
     if (!LoadConfigurationBinary("config.dat"))
     {   
-        std::cout<<"�����ļ�����ʧ��,ʹ��Ĭ������"<< std::endl;
+        std::cout<<"Не вдалося завантажити файл конфігурації, використовуються налаштування за замовчуванням"<< std::endl;
         info.BackGround = { 0, 20, 220, 150 };
 
         info.QuickKey[1] = { 0xA2 ,0x47 };
@@ -101,23 +101,23 @@ MainWindow::MainWindow()
         std::cout << "Hello, console!\n " << std::endl;
     }*/
 }
-//��������
+// Створення вікна
 HWND MainWindow::CreateMyWindow() const
 {
     WindowSize = { 0,0 };
     HWND desktop = GetDesktopWindow();
     GetClientRect(desktop, &WindowSize);
     return CreateWindowEx(
-        WS_EX_TRANSPARENT | WS_EX_LAYERED,  // ��չ������ʽ��ʹ�� WS_EX_LAYERED �� WS_EX_TRANSPARENT
-        wc.lpszClassName,                   // ��������
-        TEXT("Transparent Window"),         // ���ڱ���
-        WS_POPUP,                           // ������ʽ
-        0, 0,                               // Ĭ��λ��
-        WindowSize.right, WindowSize.bottom,                         // ���ڿ��Ⱥ͸߶�
-        nullptr,                            // ������
-        nullptr,                            // �˵�
-        hinstance,                          // Ӧ�ó���ʵ�����
-        nullptr                             // ���Ӳ���
+        WS_EX_TRANSPARENT | WS_EX_LAYERED,  // Розширені стилі: WS_EX_LAYERED | WS_EX_TRANSPARENT
+        wc.lpszClassName,                   // Ім'я класу
+        TEXT("Прозоре вікно"),         // Заголовок вікна
+        WS_POPUP,                           // Стиль вікна
+        0, 0,                               // Початкова позиція
+        WindowSize.right, WindowSize.bottom,                         // Розмір вікна
+        nullptr,                            // Батьківське вікно
+        nullptr,                            // Меню
+        hinstance,                          // HINSTANCE програми
+        nullptr                             // Додаткові параметри
     );
 }
 
@@ -138,11 +138,11 @@ void MainWindow::AddIconTray()
 
     Tray.cbSize = sizeof(NOTIFYICONDATA);
     Tray.hWnd = CreateWin();
-    Tray.uID = 1; // ͼ��� ID�������Զ���
+    Tray.uID = 1; // ID іконки в треї
     Tray.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
-    Tray.uCallbackMessage = WM_USER + 1; // �Զ�����Ϣ
-    Tray.hIcon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON1)); // IDI_TRAY_ICON ��������Դ�����ӵ�ͼ�� ID
-    lstrcpy(Tray.szTip, _T("��ͼ������"));
+    Tray.uCallbackMessage = WM_USER + 1; // Повідомлення зворотнього виклику
+    Tray.hIcon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON1)); // Завантажити іконку з ресурсів
+    lstrcpy(Tray.szTip, _T("Панель карти"));
     
     Shell_NotifyIcon(NIM_ADD,&Tray);
 }
@@ -329,24 +329,24 @@ LRESULT MainWindow::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     {
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hwnd, &ps);
-        // ����һ�����ݵ��ڴ�DC
+        // Створити сумісний пам'яті DC
         HDC memDC = CreateCompatibleDC(hdc);
-        //����DC��С��ͬ��λͼ
+        // Створити сумісний bitmap для DC
         HBITMAP memBitmap = CreateCompatibleBitmap(hdc, ps.rcPaint.right - ps.rcPaint.left, ps.rcPaint.bottom - ps.rcPaint.top);
-        //��λͼѡ��DC
+        // Вибрати bitmap у DC
         SelectObject(memDC, memBitmap);
 
         RECT rect = { 0, 0, ps.rcPaint.right - ps.rcPaint.left, ps.rcPaint.bottom - ps.rcPaint.top };
-        FillRect(memDC, &rect, (HBRUSH)GetStockObject(NULL_BRUSH)); //��͸��������ȫ�����DC
+        FillRect(memDC, &rect, (HBRUSH)GetStockObject(NULL_BRUSH)); // Очищуємо пам'ять DC
         
-        // ���Ʒ�͸�����򣬼��� info.BackGround �� RECT �ṹ
-        HBRUSH hBrush = CreateSolidBrush(RGB(255, 0, 0)); // ѡ������Ҫ����ɫ
+        // Заповнення фону відповідно до info.BackGround
+        HBRUSH hBrush = CreateSolidBrush(RGB(255, 0, 0)); // Вибір кольору для фону
         FillRect(memDC, &info.BackGround, hBrush);
-        //��ͼ����
+        // Малюємо вміст карти
         Draw(memDC);
 
 
-        //��ͼ��������
+        // Перенести малюнок з пам'яті на екран
         BitBlt(hdc, 0, 0, ps.rcPaint.right - ps.rcPaint.left, ps.rcPaint.bottom - ps.rcPaint.top, memDC, 0, 0, SRCCOPY);
         DeleteObject(memBitmap);
         DeleteObject(hBrush);
@@ -364,7 +364,7 @@ LRESULT MainWindow::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 void MainWindow::messageProc(int message, LPARAM lpramr)
 {
-    std::cout << "��Ϣ" << message << "����" << std::endl;
+    std::cout << "Повідомлення: " << message << std::endl;
     MSLLHOOKSTRUCT* mouse = (MSLLHOOKSTRUCT*)lpramr;
     switch (message)
     {
@@ -450,65 +450,65 @@ const void MainWindow::Draw(HDC & hdc)
         SelectObject(hdc, brushGreen);
         Ellipse(hdc, pointList[0].x - info.PointSize, pointList[0].y - info.PointSize, pointList[0].x + info.PointSize, pointList[0].y + info.PointSize);
 
-        // ������ɫ��ˢ�����Ƶڶ�����
+        // Малюємо червону мітку для другого пункту
         HBRUSH brushRed = CreateSolidBrush(RGB(255, 0, 0));
         SelectObject(hdc, brushRed);
         Ellipse(hdc, pointList[1].x - info.PointSize, pointList[1].y - info.PointSize, pointList[1].x + info.PointSize, pointList[1].y + info.PointSize);
 
-        // ɾ����ˢ����
+        // Видалити тимчасові кисті
         DeleteObject(brushGreen);
         DeleteObject(brushRed);
     }
 
-    // ���Ʊ���
+    // Фон для текстової інформації
     HBRUSH brushRed = CreateSolidBrush(RGB(255, 0, 255));
     FillRect(hdc, &info.BackGround, brushRed);
     DeleteObject(brushRed);
 
-    // ���������С��������ʽ
-    int fontHeight = 20; // ����߶ȣ���λ������
+    // Параметри шрифту
+    int fontHeight = 20; // висота шрифту в пунктах
     HFONT hFont = CreateFontW(
-        fontHeight,                // �ַ��߶�
-        0,                         // �ַ����ȣ�0 ��ʾ�Զ�ѡ��
-        0,                         // ת��Ƕ�
-        0,                         // ����Ƕ�
-        FW_NORMAL,                  // �����ϸ��������
-        FALSE,                      // б��
-        FALSE,                      // �»���
-        FALSE,                      // ɾ����
-        DEFAULT_CHARSET,            // �ַ���
-        OUT_DEFAULT_PRECIS,         // �������
-        CLIP_DEFAULT_PRECIS,        // ���þ���
-        DEFAULT_QUALITY,            // �������
-        DEFAULT_PITCH | FF_SWISS,   // ��������ϵ��
-        L"Arial"                    // ��������
+        fontHeight,                // висота шрифту
+        0,                         // ширина символу (0 - автоматично)
+        0,                         // кут нахилу
+        0,                         // орієнтація
+        FW_NORMAL,                 // вага шрифту
+        FALSE,                     // курсив
+        FALSE,                     // підкреслення
+        FALSE,                     // закреслення
+        DEFAULT_CHARSET,           // набір символів
+        OUT_DEFAULT_PRECIS,        // точність виходу
+        CLIP_DEFAULT_PRECIS,       // точність обрізки
+        DEFAULT_QUALITY,           // якість відтворення
+        DEFAULT_PITCH | FF_SWISS,  // сімейство і шаблон
+        L"Arial"                 // ім'я шрифту
     );
 
-    // ѡ�����嵽�豸������
+    // Вибираємо шрифт у DC
     HFONT hOldFont = (HFONT)SelectObject(hdc, hFont);
 
-    // ׼�������ı�
-    std::wstring str1 = L"����״̬�� ";
-    str1 += (Map_open) ? L"����" : L"�ر�";
-    std::wstring str3 = L"������Ϊ��ͼ���Ŵ���: " + std::to_wstring(Map_Size);
-    std::wstring str4 = L"��ͼ100������������ " + std::to_wstring(info.POINT_100M[Map_Size]);
-    std::wstring str5 = L"2��֮������������ " + std::to_wstring((int)(std::sqrt(std::pow(pointList[0].x - pointList[1].x, 2) + std::pow(pointList[0].y - pointList[1].y, 2))));
-    std::wstring str6 = L"��Ϸ�ھ��룺 " + std::to_wstring((int)(std::sqrt(std::pow(pointList[0].x - pointList[1].x, 2) + std::pow(pointList[0].y - pointList[1].y, 2)) * ((double)100 / info.POINT_100M[Map_Size])));
+    // Підготовка рядків для відображення
+    std::wstring str1 = L"Стан карти: ";
+    str1 += (Map_open) ? L"Відкрито" : L"Закрито";
+    std::wstring str3 = L"Режим збільшення карти: " + std::to_wstring(Map_Size);
+    std::wstring str4 = L"Масштаб для 100м: " + std::to_wstring(info.POINT_100M[Map_Size]);
+    std::wstring str5 = L"Відстань між точками: " + std::to_wstring((int)(std::sqrt(std::pow(pointList[0].x - pointList[1].x, 2) + std::pow(pointList[0].y - pointList[1].y, 2))));
+    std::wstring str6 = L"Відстань у метрах: " + std::to_wstring((int)(std::sqrt(std::pow(pointList[0].x - pointList[1].x, 2) + std::pow(pointList[0].y - pointList[1].y, 2)) * ((double)100 / info.POINT_100M[Map_Size])));
 
     
-    // �����ı���ʽ
+    // �����ı���ʽ
     DRAWTEXTPARAMS dtp;
     ZeroMemory(&dtp, sizeof(DRAWTEXTPARAMS));
     dtp.cbSize = sizeof(DRAWTEXTPARAMS);
-    dtp.iTabLength = 4; // ���Ը�����Ҫ�����Ʊ�λ
-    dtp.iLeftMargin = 0; // ��߾�
-    dtp.iRightMargin = 0; // �ұ߾�
+    dtp.iTabLength = 4; // ���Ը�����Ҫ�����Ʊ�λ
+    dtp.iLeftMargin = 0; // ��߾�
+    dtp.iRightMargin = 0; // �ұ߾�
     
     RECT textRect = info.BackGround;
-    textRect.left += 5;  // �ӵ��ڱ߾�
+    textRect.left += 5;  // �ӵ��ڱ߾�
     textRect.top += 5;
 
-    // �����ı�
+    // �����ı�
     DrawTextExW(hdc, const_cast<LPWSTR>(str1.c_str()), -1, &textRect, DT_LEFT | DT_WORDBREAK, &dtp);
     textRect.top += 20;
     DrawTextExW(hdc, const_cast<LPWSTR>(str3.c_str()), -1, &textRect, DT_LEFT | DT_WORDBREAK, &dtp);
@@ -520,7 +520,7 @@ const void MainWindow::Draw(HDC & hdc)
     DrawTextExW(hdc, const_cast<LPWSTR>(str6.c_str()), -1, &textRect, DT_LEFT | DT_WORDBREAK, &dtp);
 
 
-    // �ָ��ɵ�����
+    // �ָ��ɵ�����
     SelectObject(hdc, hOldFont);
     DeleteObject(hFont);
 }

@@ -13,7 +13,7 @@ struct Myinfo {
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow) {
     if (!AfxWinInit(hInstance, hPrevInstance, lpCmdLine, nCmdShow))
     {
-        wprintf(L"����: MFC ��ʼ��ʧ��\n");
+        wprintf(L"Помилка: ініціалізація MFC не вдалась\n");
         return 1;
     }
 
@@ -23,29 +23,28 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     FILE* stream;
     freopen_s(&stream, "CONOUT$", "w", stdout);
     freopen_s(&stream, "CONOUT$", "w", stderr);
-    std::cout << "Hello, console!\n " << std::endl;
+    std::cout << "Консоль увімкнено\n" << std::endl;
 #endif
     
     MainWindow& m = MainWindow::GteWindow();
     m.SetHinstance(hInstance);
     m.CreateWin();
     HWND hwnd = m.CreateWin();
-    std::cout << "��������" << std::endl;
+    std::cout << "Створення вікна..." << std::endl;
     if (hwnd == nullptr) {
         return 0;
     }
 
 
 
-    // ʹ����͸��
+    // Встановити прозорість вікна
     SetLayeredWindowAttributes(hwnd, 0, 255, LWA_ALPHA);
 
-    // ���� DWM ͸����������
+    // Розширити рамку в клієнтську область для прозорості DWM
     MARGINS margins = { -1 };
     DwmExtendFrameIntoClientArea(hwnd, &margins);
 
-
-    // ��ʾ����
+    // Показати вікно
     ShowWindow(hwnd, nCmdShow);
     UpdateWindow(hwnd);
 
@@ -55,7 +54,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     h.installHook();
     
     m.AddIconTray();
-    std::cout << "��������" << std::endl;
+    std::cout << "Готово" << std::endl;
     MSG msg = {};
     while (true) {
         while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {

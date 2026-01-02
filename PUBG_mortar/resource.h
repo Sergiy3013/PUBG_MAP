@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ 生成的包含文件。
-// 供 PUBG_mortar.rc 使用
+// 袗胁褌芯屑邪褌懈褔薪芯 蟹谐械薪械褉芯胁邪薪懈泄 褎邪泄谢 褉械褋褍褉褋褨胁 写谢褟 Microsoft Visual C++
+// 袙懈泻芯褉懈褋褌芯胁褍褦褌褜褋褟 胁 PUBG_mortar.rc
 //
 #define IDD_DIALOG1                     101
 #define IDR_MENU1                       104

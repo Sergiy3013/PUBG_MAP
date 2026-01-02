@@ -1,4 +1,4 @@
-﻿// Setting.cpp: 实现文件
+﻿// Setting.cpp: реалізація діалогу налаштувань
 //
 
 #include "pch.h"
@@ -7,7 +7,7 @@
 #include "HookHandler.h"
 #include "MainWindow.h"
 
-// Setting 对话框
+// Діалог налаштувань (інформаційна мітка)
 
 IMPLEMENT_DYNAMIC(Setting, CDialogEx)
 
@@ -23,7 +23,7 @@ Setting::Setting(CWnd* pParent /*=nullptr*/)
 {
 	if (!Create(IDD_DIALOG1, pParent))
 	{
-		AfxMessageBox(_T("Failed to create the settings dialog."));
+		AfxMessageBox(_T("Не вдалося створити діалог налаштувань."));
 	}
 	info = { 0 };
 }
@@ -36,8 +36,8 @@ void Setting::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 
-	//输入框绑定
-	//快捷键绑定系统
+	// Прив'язка елементів введення
+	// Контроли для налаштування гарячих клавіш
 	DDX_Control(pDX, IDC_HOTKEY1, HOTKEY1);
 	DDX_Control(pDX, IDC_HOTKEY2, HOTKEY2);
 	DDX_Control(pDX, IDC_HOTKEY3, HOTKEY3);
@@ -76,7 +76,7 @@ BEGIN_MESSAGE_MAP(Setting, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// Setting 消息处理程序
+// Обробники повідомлень для Setting
 
 
 void Setting::OnBnClickedOk()
@@ -89,7 +89,7 @@ void Setting::OnBnClickedOk()
 		info->PointSize = _ttoi(str);
 		MainWindow::SaveConfigurationBinary("1");
 	}
-	
+    
 }
 
 void Setting::Setinfo(MainWindowInfo &showinfo)
@@ -100,7 +100,7 @@ void Setting::Setinfo(MainWindowInfo &showinfo)
 		return;
 	}
 
-	//设置快捷键显示
+	// Встановити відображення гарячих клавіш у контролах
 	if (info != NULL)
 	{
 		SetKeyShow(HOTKEY1, info->QuickKey[1]);
@@ -120,19 +120,19 @@ void Setting::Setinfo(MainWindowInfo &showinfo)
 		{
 			if (x == 0)
 				CComboBox_List.SetCurSel(0);
-			std::wstring str = L"放大";
+			std::wstring str = L"Збільшити ";
 			str += std::to_wstring(x);
-			str += L"次";
+			str += L" раз";
 			CComboBox_List.AddString(str.c_str());
 		}
 
 		EDIT2.SetWindowTextW(std::to_wstring(info->PointSize).c_str());
 
-		// 计算高度和宽度
+		// Обчислити висоту та ширину
 		int height = info->BackGround.bottom - info->BackGround.top;
 		int width = info->BackGround.right - info->BackGround.left;
 
-		// 设置输入框的文本
+		// Встановити текст у полях введення
 		EDIT_X.SetWindowTextW(std::to_wstring(info->BackGround.left).c_str());
 		EDIT_Y.SetWindowTextW(std::to_wstring(info->BackGround.top).c_str());
 		EDIT_BOTTOM.SetWindowTextW(std::to_wstring(height).c_str());
@@ -145,7 +145,7 @@ void Setting::Setinfo(MainWindowInfo &showinfo)
 	}
 }
 
-//设置窗口快捷键显示
+// установка відображення гарячих клавіш у контролі
 bool Setting::SetKeyShow(CHotKeyCtrl& HOYKEY, std::vector<int>& keyvalue)
 {
 	if (keyvalue.empty()) return false;
@@ -181,7 +181,7 @@ bool Setting::SetKeyShow(CHotKeyCtrl& HOYKEY, std::vector<int>& keyvalue)
 	return true;
 }
 
-//将窗口快捷键设置给快捷键处理程序
+// Передати гарячі клавіші до обробника
 bool Setting::SetKeyQuick()
 {
 	info->QuickKey[1] = GetkeyList(HOTKEY1);
@@ -205,14 +205,14 @@ bool Setting::SetKeyQuick()
 	return false;
 }
 
-//将窗口快捷键转换为 键值顺序
+// Перетворити гарячі клавіші в послідовність значень
 std::vector<int> Setting::GetkeyList(CHotKeyCtrl& HOTKEY)
 {
 	std::vector<int> key;
 	WORD wVirtualKeyCode = 0;
 	WORD wModifiers = 0;
 
-	// 使用正确的重载版本来获取热键
+	// Використати правильний перевантажений метод для отримання гарячої клавіші
 	HOTKEY.GetHotKey(wVirtualKeyCode, wModifiers);
 
 	if (wModifiers & HOTKEYF_SHIFT) key.push_back(0xA0);
@@ -225,7 +225,7 @@ std::vector<int> Setting::GetkeyList(CHotKeyCtrl& HOTKEY)
 
 void Setting::OnCbnSelchangeCombo1()
 {
-	// TODO: 在此添加控件通知处理程序代码
+	// TODO: Додати обробник повідомлення контролу
 	int nSel = CComboBox_List.GetCurSel();
 	std::cout << nSel << std::endl;
 	
@@ -234,7 +234,7 @@ void Setting::OnCbnSelchangeCombo1()
 
 void Setting::OnEnKillfocusEdit1()
 {
-	// TODO: 在此添加控件通知处理程序代码
+	// TODO: Додати обробник повідомлення контролу
 	
 	if (info->POINT_100M.size()==0||CComboBox_List.GetCurSel()== CB_ERR)
 	{
@@ -248,17 +248,17 @@ void Setting::OnEnKillfocusEdit1()
 void Setting::OnBnClickedButton1()
 {
 	info->POINT_100M.push_back(0);
-	std::wstring str = L"放大";
+	std::wstring str = L"Збільшити ";
 	str += std::to_wstring(info->POINT_100M.size() - 1);
-	str += L"次";
+	str += L" раз";
 	CComboBox_List.AddString(str.c_str());
-	// TODO: 在此添加控件通知处理程序代码
+	// TODO: Додати обробник повідомлення контролу
 }
 
 void Setting::OnBnClickedButton2()
 {
 
-	int itemCount = CComboBox_List.GetCount(); // 获取组合框中的项数
+	int itemCount = CComboBox_List.GetCount(); // Отримати кількість елементів у комбобоксі
 
 	if (itemCount!=0)
 	{
@@ -303,7 +303,7 @@ void Setting::OnEnKillfocusEdit6()
 	EDIT_BOTTOM.GetWindowTextW(str);
 	int height = _ttoi(str);
 
-	// 计算 Bottom 值，假设你已经有了 Left 和 Top 的值
+	// Обчислити значення Bottom, враховуючи Left і Top
 	info->BackGround.bottom = info->BackGround.top + height;
 }
 
@@ -313,14 +313,14 @@ void Setting::OnEnKillfocusEdit7()
 	EDIT_RIGHT.GetWindowTextW(str);
 	int width = _ttoi(str);
 
-	// 计算 Right 值，假设你已经有了 Left 和 Top 的值
+	// Обчислити значення Right, враховуючи Left і Top
 	info->BackGround.right = info->BackGround.left + width;
 }
 
 
 void Setting::OnBnClickedCancel()
 {
-	// TODO: 在此添加控件通知处理程序代码
+	// TODO: Додати код обробника повідомлення контролу
 	CDialogEx::OnCancel();
 	ShowWindow(SW_HIDE);
 }

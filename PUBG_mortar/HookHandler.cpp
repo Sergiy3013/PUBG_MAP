@@ -3,14 +3,14 @@
 #include "MainWindow.h"
 
 
-//��ݼ� �����������˵��
-//��깦��  
+// Обробник подій клавіатури/миші
+// Примітки:
 /*
- �����Ϣ���� int
-    �������� 0x1000
-    �������� 0x1001
+    Додаткові коди колеса миші зберігаються як int
+        Колесо вгору: 0x1000
+        Колесо вниз: 0x1001
 
- ������ 
+    Використовується для порівняння послідовностей клавіш
 */
 
 
@@ -97,22 +97,22 @@ LRESULT HookHandler::ALLMessageProc(int nCode, WPARAM wParam, LPARAM lParam)
 
 bool HookHandler::installHook(HOOKPROC proc)
 {
-    //��װ���� ��ʧ�ܾ��˳�
+    // Встановити хуки; у разі помилки — вивести повідомлення
     MouseHook = SetWindowsHookEx(WH_MOUSE_LL, proc, NULL, 0);
     if (MouseHook==nullptr)
     {
-        std::cout << "���Ӱ�װʧ��" << std::endl;
+        std::cout << "Не вдалось встановити мишачий хук" << std::endl;
 
         return false;
     }
     KeyboardHook=SetWindowsHookEx(WH_KEYBOARD_LL, proc, NULL, 0);
     if (KeyboardHook==nullptr)
     {
-        std::cout << "���Ӱ�װʧ��" << std::endl;
+        std::cout << "Не вдалось встановити клавіатурний хук" << std::endl;
         UnhookWindowsHookEx(MouseHook);
         return false;
     }
-    std::cout << "���Ӱ�װ�ɹ�" << std::endl;
+    std::cout << "Хуки успішно встановлені" << std::endl;
     return true;
 }
 
@@ -143,7 +143,7 @@ std::vector<KeyboardRegister>::iterator HookHandler::RegisterKeyboard(std::funct
 bool HookHandler::RemoveRegisterKeyboard(std::vector<KeyboardRegister>::iterator it)
 {
     if (it == keyRegisters.end()) {
-        // ��������Ч������ false
+        // Неправильний ітератор — повернути false
         return false;
     }
 
@@ -157,12 +157,12 @@ void HookHandler::compareKeyList(const std::vector<int>& b, LPARAM lparm)
     if (!keyRegisters.empty() && !b.empty()) {
         for (const auto& registerInfo : keyRegisters) {
             for (const auto& binding : registerInfo.keyBindings) {
-                // ֻ���Ǵ�С��ȵĶ���
+                // Перевіряємо тільки зв'язки, довжина яких не перевищує поточної послідовності
                 if (binding.second.size() <= b.size()&& binding.second.size()>0) {
                     bool isMatch = true;
                     size_t matchStartIndex = 0;
 
-                    // �������У�����Ƿ����ҵ�ƥ��
+                    // �������У�����Ƿ����ҵ�ƥ��
                     for (size_t i = 0; i <= b.size() - binding.second.size(); ++i) {
                         isMatch = true;
                         for (size_t j = 0; j < binding.second.size(); ++j) {
@@ -177,7 +177,7 @@ void HookHandler::compareKeyList(const std::vector<int>& b, LPARAM lparm)
                         }
                     }
 
-                    // ����ҵ�ƥ�䣬ִ�лص�
+                    // Якщо знайдено відповідність — викликаємо зворотній виклик
                     if (isMatch) {
                         registerInfo.callback(binding.first, lparm);
                     }
@@ -190,10 +190,8 @@ void HookHandler::compareKeyList(const std::vector<int>& b, LPARAM lparm)
 void HookHandler::removeKey(std::vector<int>& keyValue, int valueToRemove)
 {
 
-    // ʹ�� std::remove ������ valueToRemove �Ƶ�����ĩβ����������ĩβ�ĵ�����
+    // Використовуємо std::remove + erase для видалення значення зі вектора
     auto newEnd = std::remove(keyValue.begin(), keyValue.end(), valueToRemove);
-
-    // ʹ�� erase ɾ���� newEnd �� end ������Ԫ��
     keyValue.erase(newEnd, keyValue.end());
 }
 

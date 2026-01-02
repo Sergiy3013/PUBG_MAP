@@ -2,7 +2,7 @@
 #include "afxdialogex.h"
 #include "MainWindow.h"
 
-// Setting 对话框
+// Діалог налаштувань
 
 class Setting : public CDialogEx
 {
@@ -13,14 +13,14 @@ public:
 	
 	virtual ~Setting();
 private:
-	Setting(CWnd* pParent = nullptr);   // 标准构造函数
-// 对话框数据
+	Setting(CWnd* pParent = nullptr);   // Стандартний конструктор
+// Дані діалогу
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_DIALOG1 };
 #endif
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
+	virtual void DoDataExchange(CDataExchange* pDX);    // Підтримка DDX/DDV
 
 	DECLARE_MESSAGE_MAP()
 public:
@@ -30,11 +30,11 @@ public:
 	void Setinfo(MainWindowInfo& showinfo);
 
 	
-	//设置窗口快捷键显示
+	// Встановити відображення гарячих клавіш у вікні
 	bool SetKeyShow(CHotKeyCtrl&, std::vector<int>&);
-	//将窗口快捷键设置给快捷键处理程序
+	// Передати гарячі клавіші до обробника
 	bool SetKeyQuick();
-	//将窗口快捷键转换为 键值顺序
+	// Перетворити гарячі клавіші у послідовність значень
 	std::vector<int> GetkeyList(CHotKeyCtrl&);
 	
 	MainWindowInfo *info;
