@@ -172,38 +172,7 @@ void Setting::Setinfo(MainWindowInfo &showinfo)
 	EDIT_RIGHT.SetFont(pNewFont);
 	Chcke1.SetFont(pNewFont);
 
-	// Функція для масштабування контролу вдвічі
-	auto DoubleControlSize = [&](CWnd& ctrl) {
-		CRect rc;
-		ctrl.GetWindowRect(&rc);
-		ScreenToClient(&rc);
-		rc.right = rc.left + (rc.Width() * 2);
-		rc.bottom = rc.top + (rc.Height() * 2);
-		ctrl.MoveWindow(&rc);
-	};
-
-	// Збільшуємо основні поля введення, комбобокс і кнопки
-
-	DoubleControlSize(HOTKEY1);
-	DoubleControlSize(HOTKEY2);
-	DoubleControlSize(HOTKEY3);
-	DoubleControlSize(HOTKEY4);
-	DoubleControlSize(HOTKEY6);
-	DoubleControlSize(HOTKEY7);
-	DoubleControlSize(HOTKEY8);
-	DoubleControlSize(CComboBox_List);
-	DoubleControlSize(EDIT);
-	DoubleControlSize(EDIT2);
-	DoubleControlSize(EDIT_X);
-	DoubleControlSize(EDIT_Y);
-	DoubleControlSize(EDIT_BOTTOM);
-	DoubleControlSize(EDIT_RIGHT);
-
-	// Збільшити розмір кнопок OK/Cancel якщо вони існують
-	CWnd* pBtnOK = GetDlgItem(IDOK);
-	CWnd* pBtnCancel = GetDlgItem(IDCANCEL);
-	if (pBtnOK) DoubleControlSize(*pBtnOK);
-	if (pBtnCancel) DoubleControlSize(*pBtnCancel);
+	// (kept font changes only; control sizes remain unchanged)
 }
 
 // установка відображення гарячих клавіш у контролі
