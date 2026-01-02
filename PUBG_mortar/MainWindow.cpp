@@ -488,12 +488,12 @@ const void MainWindow::Draw(HDC & hdc)
     HFONT hOldFont = (HFONT)SelectObject(hdc, hFont);
 
     // Підготовка рядків для відображення
-    std::wstring str1 = L"Стан карти: ";
-    str1 += (Map_open) ? L"Відкрито" : L"Закрито";
-    std::wstring str3 = L"Режим збільшення карти: " + std::to_wstring(Map_Size);
-    std::wstring str4 = L"Масштаб для 100м: " + std::to_wstring(info.POINT_100M[Map_Size]);
-    std::wstring str5 = L"Відстань між точками: " + std::to_wstring((int)(std::sqrt(std::pow(pointList[0].x - pointList[1].x, 2) + std::pow(pointList[0].y - pointList[1].y, 2))));
-    std::wstring str6 = L"Відстань у метрах: " + std::to_wstring((int)(std::sqrt(std::pow(pointList[0].x - pointList[1].x, 2) + std::pow(pointList[0].y - pointList[1].y, 2)) * ((double)100 / info.POINT_100M[Map_Size])));
+    std::wstring str1 = L"\u0421\u0442\u0430\u043D \u043A\u0430\u0440\u0442\u0438: ";
+    str1 += (Map_open) ? std::wstring(L"\u0412\u0456\u0434\u043A\u0440\u0438\u0442\u043E") : std::wstring(L"\u0417\u0430\u043A\u0440\u0438\u0442\u043E");
+    std::wstring str3 = std::wstring(L"\u0420\u0435\u0436\u0438\u043C \u0437\u0431\u0456\u043B\u044C\u0448\u0435\u043D\u043D\u044F \u043A\u0430\u0440\u0442\u0438: ") + std::to_wstring(Map_Size);
+    std::wstring str4 = std::wstring(L"\u041C\u0430\u0441\u0448\u0442\u0430\u0431 \u0434\u043B\u044F 100\u043C: ") + std::to_wstring(info.POINT_100M[Map_Size]);
+    std::wstring str5 = std::wstring(L"\u0412\u0456\u0434\u0441\u0442\u0430\u043D\u044C \u043C\u0456\u0436 \u0442\u043E\u0447\u043A\u0430\u043C\u0438: ") + std::to_wstring((int)(std::sqrt(std::pow(pointList[0].x - pointList[1].x, 2) + std::pow(pointList[0].y - pointList[1].y, 2))));
+    std::wstring str6 = std::wstring(L"\u0412\u0456\u0434\u0441\u0442\u0430\u043D\u044C \u0443 \u043C\u0435\u0442\u0440\u0430\u0445: ") + std::to_wstring((int)(std::sqrt(std::pow(pointList[0].x - pointList[1].x, 2) + std::pow(pointList[0].y - pointList[1].y, 2)) * ((double)100 / info.POINT_100M[Map_Size])));
 
     
     // Параметри для DrawTextExW
