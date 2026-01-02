@@ -143,36 +143,6 @@ void Setting::Setinfo(MainWindowInfo &showinfo)
 			Chcke1.SetCheck(BST_UNCHECKED);
 		
 	}
-
-	// Збільшити розміри контролів і застосувати шрифт, що підтримує кирилицю
-	// Створюємо шрифт із більшим розміром і восточноєвропейською кодировкою
-	CFont* pNewFont = new CFont();
-	LOGFONTW lf = {0};
-	lf.lfHeight = -18; // приблизно 18pt
-	lf.lfWeight = FW_NORMAL;
-	lf.lfCharSet = EASTEUROPE_CHARSET;
-	wcscpy_s(lf.lfFaceName, L"Segoe UI");
-	pNewFont->CreateFontIndirectW(&lf);
-
-	// Застосувати шрифт до діалогу та основних контролів
-	SetFont(pNewFont);
-	HOTKEY1.SetFont(pNewFont);
-	HOTKEY2.SetFont(pNewFont);
-	HOTKEY3.SetFont(pNewFont);
-	HOTKEY4.SetFont(pNewFont);
-	HOTKEY6.SetFont(pNewFont);
-	HOTKEY7.SetFont(pNewFont);
-	HOTKEY8.SetFont(pNewFont);
-	CComboBox_List.SetFont(pNewFont);
-	EDIT.SetFont(pNewFont);
-	EDIT2.SetFont(pNewFont);
-	EDIT_X.SetFont(pNewFont);
-	EDIT_Y.SetFont(pNewFont);
-	EDIT_BOTTOM.SetFont(pNewFont);
-	EDIT_RIGHT.SetFont(pNewFont);
-	Chcke1.SetFont(pNewFont);
-
-	// (kept font changes only; control sizes remain unchanged)
 }
 
 // установка відображення гарячих клавіш у контролі
